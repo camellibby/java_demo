@@ -1,17 +1,27 @@
 package com.camellibby.realtime;
 
 import io.confluent.connect.jdbc.sink.JdbcSinkTask;
+import io.debezium.config.Configuration;
+import io.debezium.connector.mysql.MySqlConnector;
+import io.debezium.connector.mysql.MySqlConnectorTask;
 import io.debezium.data.Envelope;
 import io.debezium.engine.ChangeEvent;
 import io.debezium.engine.DebeziumEngine;
 import io.debezium.engine.format.Json;
 import io.debezium.transforms.ExtractNewRecordState;
+import org.apache.kafka.connect.connector.ConnectorContext;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.data.Timestamp;
+import org.apache.kafka.connect.json.JsonConverter;
+import org.apache.kafka.connect.runtime.WorkerConfig;
+import org.apache.kafka.connect.runtime.standalone.StandaloneConfig;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.source.SourceRecord;
+import org.apache.kafka.connect.source.SourceTask;
+import org.apache.kafka.connect.source.SourceTaskContext;
+import org.apache.kafka.connect.storage.*;
 import org.apache.kafka.connect.transforms.ReplaceField;
 
 import java.io.IOException;
@@ -23,6 +33,7 @@ import java.util.concurrent.Executors;
 /**
  * @author luoxinliang
  */
+
 public class RealtimeApplication {
     public static void main(String[] args) {
         RealtimeApplication app = new RealtimeApplication();
@@ -36,7 +47,79 @@ public class RealtimeApplication {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        manualStart(props);
+//        autoStart(props);
+    }
 
+    public void manualStart(Properties props) {
+
+        Configuration config = Configuration.from(props);
+
+        MySqlConnector connector = new MySqlConnector();
+        ConnectorContext context = new ConnectorContext() {
+            @Override
+            public void requestTaskReconfiguration() {
+                // Do nothing ...
+            }
+
+            @Override
+            public void raiseError(Exception e) {
+                e.printStackTrace();
+            }
+        };
+        connector.initialize(context);
+        connector.start(config.asMap());
+        List<Map<String, String>> taskConfigs = connector.taskConfigs(1);
+        SourceTask task = new MySqlConnectorTask();
+
+        FileOffsetBackingStore offsetStore = new FileOffsetBackingStore();
+        Map<String, String> workConfigMap = config.asMap();
+        workConfigMap.put(WorkerConfig.KEY_CONVERTER_CLASS_CONFIG, JsonConverter.class.getName());
+        workConfigMap.put(WorkerConfig.VALUE_CONVERTER_CLASS_CONFIG, JsonConverter.class.getName());
+        WorkerConfig workerConfig = new StandaloneConfig(workConfigMap);
+        offsetStore.configure(workerConfig);
+        offsetStore.start();
+
+        String engineName = config.getString("name");
+        Converter keyConverter = new JsonConverter();
+        keyConverter.configure(config.subset("internal.key.converter.", true).asMap(), true);
+        Converter valueConverter = new JsonConverter();
+        Configuration valueConverterConfig = config.edit().with("internal.key.converter.schemas.enable", false).build();
+        valueConverter.configure(valueConverterConfig.subset("internal.key.converter.", true).asMap(), false);
+        OffsetStorageReader offsetReader = new OffsetStorageReaderImpl(offsetStore, engineName, keyConverter, valueConverter);
+
+        SourceTaskContext taskContext = new SourceTaskContext() {
+            @Override
+            public OffsetStorageReader offsetStorageReader() {
+                return offsetReader;
+            }
+
+            // Purposely not marking this method with @Override as it was introduced in Kafka 2.x
+            // and otherwise would break builds based on Kafka 1.x
+            public Map<String, String> configs() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
+        task.initialize(taskContext);
+        task.start(taskConfigs.get(0));
+        List<SourceRecord> changeRecords = null;
+        while (true) {
+            try {
+                changeRecords = task.poll();
+                if (changeRecords != null && !changeRecords.isEmpty()) {
+                    changeRecords.stream()
+                            .filter(Objects::nonNull)
+                            .forEach(System.out::println);
+                }
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void autoStart(Properties props) {
         // Create the engine with this configuration ...
         try (DebeziumEngine<ChangeEvent<String, String>> engine = DebeziumEngine.create(Json.class)
                 .using(props)
@@ -110,7 +193,7 @@ public class RealtimeApplication {
 
     public void sinkConfigTest() {
         try (final ExtractNewRecordState<SourceRecord> transform = new ExtractNewRecordState<>();
-            final ReplaceField.Value<SourceRecord> transform2 = new ReplaceField.Value<>()) {
+             final ReplaceField.Value<SourceRecord> transform2 = new ReplaceField.Value<>()) {
             final Map<String, String> props00 = new HashMap<>();
             props00.put("add.fields", "before.id,before.name,after.id,after.name");
             props00.put("add.headers", "op");
