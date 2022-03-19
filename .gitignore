@@ -26,3 +26,5 @@ hs_err_pid*
 target
 *.iml
 test.*.db
+/realtime/db_history.dat
+/realtime/src/main/resources/app.properties

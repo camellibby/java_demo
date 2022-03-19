@@ -36,15 +36,6 @@ public class RealtimeApplication {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        props.setProperty("name", "engine");
-        props.setProperty("connector.class", "io.debezium.connector.mysql.MySqlConnector");
-        props.setProperty("offset.storage", "org.apache.kafka.connect.storage.FileOffsetBackingStore");
-        props.setProperty("offset.storage.file.filename", "realtime/offsets.dat");
-        props.setProperty("offset.flush.interval.ms", "60000");
-        props.setProperty("database.server.id", "1234");
-        props.setProperty("database.server.name", "my-app-connector1");
-        props.setProperty("database.history", "io.debezium.relational.history.FileDatabaseHistory");
-        props.setProperty("database.history.file.filename", "realtime/db_history.dat");
 
         // Create the engine with this configuration ...
         try (DebeziumEngine<ChangeEvent<String, String>> engine = DebeziumEngine.create(Json.class)

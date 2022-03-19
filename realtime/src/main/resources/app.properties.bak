@@ -1,0 +1,16 @@
+database.hostname=
+database.port=
+database.user=
+database.password=
+database.include.list=abc
+table.include.list=demo3
+
+name=engine
+connector.class=io.debezium.connector.mysql.MySqlConnector
+offset.storage=org.apache.kafka.connect.storage.FileOffsetBackingStore
+offset.storage.file.filename=realtime/offsets.dat
+offset.flush.interval.ms=60000
+database.server.id=1188
+database.server.name=my-app-connector1
+database.history=io.debezium.relational.history.FileDatabaseHistory
+database.history.file.filename=realtime/db_history.dat
