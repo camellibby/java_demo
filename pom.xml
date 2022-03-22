@@ -15,7 +15,6 @@
         <module>realtime</module>
         <module>thread</module>
         <module>springcloud</module>
-        <module>nacos</module>
     </modules>
 
     <properties>
