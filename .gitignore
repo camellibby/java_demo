@@ -27,4 +27,6 @@ target
 *.iml
 test.*.db
 /realtime/db_history.dat
-/realtime/src/main/resources/app.properties
+/realtime/src/main/resources/source.properties
+/realtime/src/main/resources/sink.properties
+/realtime/offsets.dat

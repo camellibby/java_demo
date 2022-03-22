@@ -1,11 +1,11 @@
-database.hostname=
-database.port=
-database.user=
-database.password=
+database.hostname=ip
+database.port=port
+database.user=user
+database.password=password
 database.include.list=abc
-table.include.list=demo3
+table.include.list=abc.person
 
-name=engine
+name=source
 connector.class=io.debezium.connector.mysql.MySqlConnector
 offset.storage=org.apache.kafka.connect.storage.FileOffsetBackingStore
 offset.storage.file.filename=realtime/offsets.dat
