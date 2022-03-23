@@ -11,15 +11,12 @@ import io.debezium.engine.DebeziumEngine;
 import io.debezium.engine.format.Json;
 import io.debezium.transforms.ExtractNewRecordState;
 import org.apache.kafka.common.TopicPartition;
-import org.apache.kafka.connect.connector.ConnectRecord;
 import org.apache.kafka.connect.connector.ConnectorContext;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.data.Timestamp;
 import org.apache.kafka.connect.json.JsonConverter;
 import org.apache.kafka.connect.runtime.WorkerConfig;
-import org.apache.kafka.connect.runtime.WorkerSinkTaskContext;
 import org.apache.kafka.connect.runtime.standalone.StandaloneConfig;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;
@@ -35,7 +32,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 /**
  * @author luoxinliang
@@ -44,6 +41,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class RealtimeApplication {
     private SinkTask sinkTask;
     private ExtractNewRecordState<SinkRecord> transform;
+
     public static void main(String[] args) {
         RealtimeApplication app = new RealtimeApplication();
         new Thread(app::source).start();
@@ -57,11 +55,11 @@ public class RealtimeApplication {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        autoStart(props);
-        manualStart(props);
+//        debeziumExecutorStart(props);
+        connectorStart(props);
     }
 
-    public void autoStart(Properties props) {
+    public void debeziumExecutorStart(Properties props) {
         // Create the engine with this configuration ...
         try (DebeziumEngine<ChangeEvent<String, String>> engine = DebeziumEngine.create(Json.class)
                 .using(props)
@@ -80,8 +78,7 @@ public class RealtimeApplication {
         }
     }
 
-    public void manualStart(Properties props) {
-
+    public void connectorStart(Properties props) {
         Configuration config = Configuration.from(props);
 
         MySqlConnector connector = new MySqlConnector();
@@ -139,16 +136,28 @@ public class RealtimeApplication {
             try {
                 changeRecords = task.poll();
                 if (changeRecords != null && !changeRecords.isEmpty()) {
-                    changeRecords.stream()
+                    List<SourceRecord> sourceRecords = changeRecords.stream()
                             .filter(Objects::nonNull)
-                            .forEach((x) -> {
-                                byte[] keyBytes = converter.fromConnectData("", x.keySchema(), x.key());
-                                byte[] valueBytes = converter.fromConnectData("", x.valueSchema(), x.value());
-                                System.out.println(new String(keyBytes));
-                                System.out.println(new String(valueBytes));
-                                SinkRecord record = new SinkRecord("topic", 0, x.keySchema(), x.key(), x.valueSchema(), x.value(), 0);
-                                sinkTask.put(Collections.singletonList(transform.apply(record)));
-                            });
+                            .collect(Collectors.toList());
+
+                    List<SinkRecord> sinkRecords = new ArrayList<>();
+                    sourceRecords.forEach(sourceRecord -> {
+                        String key = new String(converter.fromConnectData("", sourceRecord.keySchema(), sourceRecord.key()));
+                        String value = new String(converter.fromConnectData("", sourceRecord.valueSchema(), sourceRecord.value()));
+                        System.out.println(key);
+                        System.out.println(value);
+                        if(sourceRecord.valueSchema().field("op") == null){
+                            return;
+                        }
+                        SinkRecord sinkRecord = new SinkRecord("topic", 0,
+                                sourceRecord.keySchema(), sourceRecord.key(),
+                                sourceRecord.valueSchema(), sourceRecord.value(), 0);
+                        sinkRecord = transform.apply(sinkRecord);
+                        sinkRecords.add(sinkRecord);
+                    });
+                    if (sinkRecords.size() > 0 && sinkTask != null) {
+                        sinkTask.put(sinkRecords);
+                    }
                 }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
