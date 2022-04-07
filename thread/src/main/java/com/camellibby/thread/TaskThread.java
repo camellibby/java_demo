@@ -1,3 +1,5 @@
+package com.camellibby.thread;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

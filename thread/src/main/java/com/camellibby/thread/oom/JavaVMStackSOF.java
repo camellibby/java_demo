@@ -1,4 +1,4 @@
-package oom;
+package com.camellibby.thread.oom;
 
 /**
  * VM Args：-Xss128k
@@ -14,11 +14,11 @@ public class JavaVMStackSOF {
 //    }
 //
 //    public static void main(String[] args) throws Throwable {
-//        JavaVMStackSOF oom = new JavaVMStackSOF();
+//        JavaVMStackSOF com.camellibby.thread.oom = new JavaVMStackSOF();
 //        try {
-//            oom.stackLeak();
+//            com.camellibby.thread.oom.stackLeak();
 //        } catch (Throwable e) {
-//            System.out.println("stack length:" + oom.stackLength);
+//            System.out.println("stack length:" + com.camellibby.thread.oom.stackLength);
 //            throw e;
 //        }
 //    }

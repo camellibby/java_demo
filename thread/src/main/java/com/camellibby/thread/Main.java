@@ -1,3 +1,5 @@
+package com.camellibby.thread;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

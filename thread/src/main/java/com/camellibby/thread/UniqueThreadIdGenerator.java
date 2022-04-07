@@ -1,3 +1,5 @@
+package com.camellibby.thread;
+
 /**
  * @author luoxinliang
  */

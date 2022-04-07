@@ -1,4 +1,4 @@
-package oom;
+package com.camellibby.thread.oom;
 
 import java.util.ArrayList;
 import java.util.List;
