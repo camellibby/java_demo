@@ -16,6 +16,7 @@
         <module>thread</module>
         <module>springcloud</module>
         <module>nio</module>
+        <module>common</module>
     </modules>
 
     <properties>
