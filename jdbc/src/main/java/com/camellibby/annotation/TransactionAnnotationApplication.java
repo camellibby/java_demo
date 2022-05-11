@@ -1,9 +1,9 @@
-package com.camellibby.tx.annotation;
+package com.camellibby.annotation;
 
-import com.camellibby.tx.annotation.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author luoxinliang
  */
 @EnableTransactionManagement
-@ComponentScan("com.camellibby.tx.annotation")
+@ComponentScan("com.camellibby.annotation")
 public class TransactionAnnotationApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(TransactionAnnotationApplication.class);
@@ -42,6 +42,8 @@ public class TransactionAnnotationApplication {
             users.add(user3);
 
             userService.insertList(users);
+        } catch (DuplicateKeyException ex) {
+            System.out.println("主键发生冲突，回滚");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

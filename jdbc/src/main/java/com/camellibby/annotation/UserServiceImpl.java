@@ -1,9 +1,9 @@
-package com.camellibby.tx.annotation.service;
+package com.camellibby.annotation;
 
-import com.camellibby.tx.annotation.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,19 +11,21 @@ import java.util.List;
 /**
  * @author luoxinliang
  */
-@Component
+@Service
 class UserServiceImpl implements UserService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
     @Override
     public void reset() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS user_info");
-        jdbcTemplate.execute("create table user_info(id LONG PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), age INT)");
+        SimpleDriverDataSource dataSource = (SimpleDriverDataSource) jdbcTemplate.getDataSource();
+        if (dataSource.getDriver() instanceof com.mysql.cj.jdbc.Driver) {
+            jdbcTemplate.execute("DROP TABLE IF EXISTS user_info");
+            jdbcTemplate.execute("create table user_info(id bigint NOT NULL AUTO_INCREMENT, name varchar(50), age int, PRIMARY KEY (`id`))");
+        } else if (dataSource.getDriver() instanceof org.h2.Driver) {
+            jdbcTemplate.execute("DROP TABLE IF EXISTS user_info");
+            jdbcTemplate.execute("create table user_info(id LONG PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50), age INT)");
+        }
     }
 
     @Override
@@ -38,17 +40,17 @@ class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public void insert(User user) {
+        jdbcTemplate.update("INSERT INTO user_info (name, age) VALUES (?, ?)", user.getName(), user.getAge());
+    }
+
     @Transactional
     @Override
     public void insertList(List<User> users) {
         for (User user : users) {
             jdbcTemplate.update("INSERT INTO user_info (id, name, age) VALUES (?, ?, ?)", user.getId(), user.getName(), user.getAge());
         }
-    }
-
-    @Override
-    public void insert(User user) {
-        jdbcTemplate.update("INSERT INTO user_info (name, age) VALUES (?, ?)", user.getName(), user.getAge());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.camellibby.tx.annotation;
+package com.camellibby.xml;
 
 /**
  * @author luoxinliang

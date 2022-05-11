@@ -1,10 +1,8 @@
-package com.camellibby.tx.xml;
+package com.camellibby.xml;
 
-import com.camellibby.tx.xml.service.UserService;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +38,8 @@ public class TransactionXmlApplication {
             users.add(user3);
 
             userService.insertList(users);
+        } catch (DuplicateKeyException ex) {
+            System.out.println("主键发生冲突，回滚");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

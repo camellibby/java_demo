@@ -1,4 +1,4 @@
-package com.camellibby.jdbc.xml;
+package com.camellibby.annotation;
 
 /**
  * @author luoxinliang

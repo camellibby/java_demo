@@ -1,6 +1,5 @@
-package com.camellibby.jdbc.annotation;
+package com.camellibby.annotation;
 
-import com.camellibby.jdbc.annotation.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * @author luoxinliang
  */
-@ComponentScan("com.camellibby.jdbc.annotation")
+@ComponentScan("com.camellibby.annotation")
 public class AnnotationApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotationApplication.class);

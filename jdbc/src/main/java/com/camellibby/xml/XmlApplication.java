@@ -1,6 +1,5 @@
-package com.camellibby.jdbc.xml;
+package com.camellibby.xml;
 
-import com.camellibby.jdbc.xml.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

@@ -1,7 +1,7 @@
-package com.camellibby.jdbc.xml.service;
+package com.camellibby.xml;
 
-import com.camellibby.jdbc.xml.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +36,14 @@ class UserServiceImpl implements UserService {
     @Override
     public void insert(User user) {
         jdbcTemplate.update("INSERT INTO user_info (name, age) VALUES (?, ?)", user.getName(), user.getAge());
+    }
+
+    @Transactional
+    @Override
+    public void insertList(List<User> users) {
+        for (User user : users) {
+            jdbcTemplate.update("INSERT INTO user_info (id, name, age) VALUES (?, ?, ?)", user.getId(), user.getName(), user.getAge());
+        }
     }
 
     @Override

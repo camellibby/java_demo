@@ -1,6 +1,7 @@
-package com.camellibby.jdbc.xml.service;
+package com.camellibby.annotation;
 
-import com.camellibby.jdbc.xml.User;
+import com.camellibby.annotation.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,12 @@ public interface UserService {
      * @param user
      */
     void insert(User user);
+
+    /**
+     *
+     * @param users
+     */
+    void insertList(List<User> users);
 
     /**
      *

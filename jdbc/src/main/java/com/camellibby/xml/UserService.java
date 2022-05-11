@@ -1,6 +1,6 @@
-package com.camellibby.tx.xml.service;
+package com.camellibby.xml;
 
-import com.camellibby.tx.xml.User;
+import com.camellibby.xml.User;
 
 import java.util.List;
 
@@ -22,15 +22,15 @@ public interface UserService {
 
     /**
      *
-     * @param users
-     */
-    void insertList(List<User> users);
-
-    /**
-     *
      * @param user
      */
     void insert(User user);
+
+    /**
+     *
+     * @param users
+     */
+    void insertList(List<User> users);
 
     /**
      *
