@@ -1,8 +1,5 @@
 package com.camellibby.annotation;
 
-import com.camellibby.annotation.User;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 /**

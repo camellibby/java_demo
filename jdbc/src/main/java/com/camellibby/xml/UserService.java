@@ -1,7 +1,5 @@
 package com.camellibby.xml;
 
-import com.camellibby.xml.User;
-
 import java.util.List;
 
 /**
