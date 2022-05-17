@@ -1,10 +1,15 @@
-database.hostname=ip
-database.port=port
-database.user=user
-database.password=password
-database.include.list=abc
-table.include.list=abc.person
+database.hostname=127.0.0.1
+database.port=3306
+database.user=root
+database.password=123456
+database.include.list=test
+table.include.list=test.user
+column.include.list=test.user.id,test.user.name,test.user.age
+include.schema.changes=true
+database.history.skip.unparseable.ddl=true
+time.precision.mode=connect
 
+tasks.max=1
 name=source
 connector.class=io.debezium.connector.mysql.MySqlConnector
 offset.storage=org.apache.kafka.connect.storage.FileOffsetBackingStore

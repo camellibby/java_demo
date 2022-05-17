@@ -3,9 +3,8 @@ package com.camellibby.realtime;
 import io.confluent.connect.jdbc.JdbcSinkConnector;
 import io.confluent.connect.jdbc.sink.JdbcSinkTask;
 import io.debezium.config.Configuration;
-import io.debezium.connector.mysql.MySqlConnector;
-import io.debezium.connector.mysql.MySqlConnectorTask;
 import io.debezium.data.Envelope;
+import io.debezium.embedded.Connect;
 import io.debezium.engine.ChangeEvent;
 import io.debezium.engine.DebeziumEngine;
 import io.debezium.engine.format.Json;
@@ -16,50 +15,179 @@ import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.json.JsonConverter;
-import org.apache.kafka.connect.runtime.WorkerConfig;
-import org.apache.kafka.connect.runtime.standalone.StandaloneConfig;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;
 import org.apache.kafka.connect.sink.SinkTaskContext;
 import org.apache.kafka.connect.source.SourceRecord;
-import org.apache.kafka.connect.source.SourceTask;
-import org.apache.kafka.connect.source.SourceTaskContext;
-import org.apache.kafka.connect.storage.*;
 import org.apache.kafka.connect.transforms.ReplaceField;
+import org.apache.kafka.connect.transforms.Transformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author luoxinliang
  */
 
 public class RealtimeApplication {
-    private SinkTask sinkTask;
-    private ExtractNewRecordState<SinkRecord> transform;
+    Logger log = LoggerFactory.getLogger(RealtimeApplication.class);
+    Queue<SourceRecord> sourceRecords = new LinkedList<>();
 
     public static void main(String[] args) {
         RealtimeApplication app = new RealtimeApplication();
-        new Thread(app::source).start();
-        new Thread(app::sink).start();
+        app.pipeline();
     }
 
-    public void source() {
-        Properties props = new Properties();
+    private void pipeline() {
+        Properties propsSource = new Properties();
+        Properties propsSink = new Properties();
         try {
-            props.load(RealtimeApplication.class.getResourceAsStream("/source.properties"));
+            propsSource.load(this.getClass().getResourceAsStream("/source.properties"));
+            propsSink.load(this.getClass().getResourceAsStream("/sink.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
-//        debeziumExecutorStart(props);
-        connectorStart(props);
+        RealtimeApplication app = new RealtimeApplication();
+        try {
+            // Run the engine asynchronously ...
+            ExecutorService executor = Executors.newScheduledThreadPool(2);
+            executor.execute(app.getSourceThread(propsSource));
+            executor.execute(app.getSinkThread(propsSink));
+            executor.awaitTermination(300, TimeUnit.MINUTES);
+
+            // Do something else or wait for a signal or an event
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
-    public void debeziumExecutorStart(Properties props) {
+    private Runnable getSourceThread(Properties props) {
+        JsonConverter keyConverter = new JsonConverter();
+        keyConverter.configure(Collections.emptyMap(), true);
+        JsonConverter valueConverter = new JsonConverter();
+        valueConverter.configure(Collections.emptyMap(), false);
+        // Create the engine with this configuration ...
+        DebeziumEngine<ChangeEvent<SourceRecord, SourceRecord>> engine = DebeziumEngine.create(Connect.class)
+                .using(props)
+                .notifying((x) -> {
+                    if (x.value().valueSchema().field("op") == null) {
+                        return;
+                    }
+                    sourceRecords.add(x.value());
+                }).build();
+        return engine;
+    }
+
+    private Runnable getSinkThread(Properties props) {
+        return new ConfluentEngine(props);
+    }
+
+    private class ConfluentEngine implements Runnable {
+        private JdbcSinkConnector connector;
+        private SinkTask sinkTask;
+        private Transformation<SinkRecord> transformation;
+        private Configuration config;
+
+        public ConfluentEngine(Properties props) {
+            this.config = Configuration.from(props);
+            this.connector = new JdbcSinkConnector();
+            this.sinkTask = new JdbcSinkTask();
+            this.transformation = new ExtractNewRecordState<>();
+            initialize();
+        }
+
+        private void initialize() {
+            this.connector.initialize(new ConnectorContext() {
+                @Override
+                public void requestTaskReconfiguration() {
+
+                }
+
+                @Override
+                public void raiseError(Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            });
+            this.sinkTask.initialize(new SinkTaskContext() {
+                @Override
+                public Map<String, String> configs() {
+                    return null;
+                }
+
+                @Override
+                public void offset(Map<TopicPartition, Long> offsets) {
+
+                }
+
+                @Override
+                public void offset(TopicPartition tp, long offset) {
+
+                }
+
+                @Override
+                public void timeout(long timeoutMs) {
+
+                }
+
+                @Override
+                public Set<TopicPartition> assignment() {
+                    return null;
+                }
+
+                @Override
+                public void pause(TopicPartition... partitions) {
+
+                }
+
+                @Override
+                public void resume(TopicPartition... partitions) {
+
+                }
+
+                @Override
+                public void requestCommit() {
+
+                }
+            });
+            Map<String, String> params = new HashMap<>(1);
+            params.put("transforms.unwrap.type", "io.debezium.transforms.ExtractNewRecordState");
+            this.transformation.configure(params);
+        }
+
+        @Override
+        public void run() {
+            connector.start(config.asMap());
+            List<Map<String, String>> taskConfigs = connector.taskConfigs(1);
+            sinkTask.start(taskConfigs.get(0));
+            while (true) {
+                SourceRecord sourceRecord = sourceRecords.poll();
+
+                if (sourceRecord == null) {
+                    try {
+                        Thread.sleep(1000);
+                        continue;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                SinkRecord sinkRecord = new SinkRecord("topic", 0,
+                        sourceRecord.keySchema(), sourceRecord.key(),
+                        sourceRecord.valueSchema(), sourceRecord.value(), 0);
+                sinkRecord = transformation.apply(sinkRecord);
+                sinkTask.put(Collections.singletonList(sinkRecord));
+            }
+        }
+    }
+
+    public void debeziumExecutorStart() throws IOException {
+        Properties props = new Properties();
+        props.load(this.getClass().getResourceAsStream("/source.properties"));
         // Create the engine with this configuration ...
         try (DebeziumEngine<ChangeEvent<String, String>> engine = DebeziumEngine.create(Json.class)
                 .using(props)
@@ -71,171 +199,11 @@ public class RealtimeApplication {
             // Run the engine asynchronously ...
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(engine);
-
+            executor.awaitTermination(60, TimeUnit.MINUTES);
             // Do something else or wait for a signal or an event
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             System.out.println(ex.getMessage());
         }
-    }
-
-    public void connectorStart(Properties props) {
-        Configuration config = Configuration.from(props);
-
-        MySqlConnector connector = new MySqlConnector();
-        ConnectorContext context = new ConnectorContext() {
-            @Override
-            public void requestTaskReconfiguration() {
-                // Do nothing ...
-            }
-
-            @Override
-            public void raiseError(Exception e) {
-                e.printStackTrace();
-            }
-        };
-        connector.initialize(context);
-        connector.start(config.asMap());
-        List<Map<String, String>> taskConfigs = connector.taskConfigs(1);
-        SourceTask task = new MySqlConnectorTask();
-
-        FileOffsetBackingStore offsetStore = new FileOffsetBackingStore();
-        Map<String, String> workConfigMap = config.asMap();
-        workConfigMap.put(WorkerConfig.KEY_CONVERTER_CLASS_CONFIG, JsonConverter.class.getName());
-        workConfigMap.put(WorkerConfig.VALUE_CONVERTER_CLASS_CONFIG, JsonConverter.class.getName());
-        WorkerConfig workerConfig = new StandaloneConfig(workConfigMap);
-        offsetStore.configure(workerConfig);
-        offsetStore.start();
-
-        String engineName = config.getString("name");
-        Converter keyConverter = new JsonConverter();
-        keyConverter.configure(config.subset("internal.key.converter.", true).asMap(), true);
-        Converter valueConverter = new JsonConverter();
-        Configuration valueConverterConfig = config.edit().with("internal.key.converter.schemas.enable", false).build();
-        valueConverter.configure(valueConverterConfig.subset("internal.key.converter.", true).asMap(), false);
-        OffsetStorageReader offsetReader = new OffsetStorageReaderImpl(offsetStore, engineName, keyConverter, valueConverter);
-
-        SourceTaskContext taskContext = new SourceTaskContext() {
-            @Override
-            public OffsetStorageReader offsetStorageReader() {
-                return offsetReader;
-            }
-
-            // Purposely not marking this method with @Override as it was introduced in Kafka 2.x
-            // and otherwise would break builds based on Kafka 1.x
-            public Map<String, String> configs() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        };
-        task.initialize(taskContext);
-        task.start(taskConfigs.get(0));
-        List<SourceRecord> changeRecords = null;
-        JsonConverter converter = new JsonConverter();
-        converter.configure(Collections.emptyMap(), false);
-        while (true) {
-            try {
-                changeRecords = task.poll();
-                if (changeRecords != null && !changeRecords.isEmpty()) {
-                    List<SourceRecord> sourceRecords = changeRecords.stream()
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
-
-                    List<SinkRecord> sinkRecords = new ArrayList<>();
-                    sourceRecords.forEach(sourceRecord -> {
-                        String key = new String(converter.fromConnectData("", sourceRecord.keySchema(), sourceRecord.key()));
-                        String value = new String(converter.fromConnectData("", sourceRecord.valueSchema(), sourceRecord.value()));
-                        System.out.println(key);
-                        System.out.println(value);
-                        if(sourceRecord.valueSchema().field("op") == null){
-                            return;
-                        }
-                        SinkRecord sinkRecord = new SinkRecord("topic", 0,
-                                sourceRecord.keySchema(), sourceRecord.key(),
-                                sourceRecord.valueSchema(), sourceRecord.value(), 0);
-                        sinkRecord = transform.apply(sinkRecord);
-                        sinkRecords.add(sinkRecord);
-                    });
-                    if (sinkRecords.size() > 0 && sinkTask != null) {
-                        sinkTask.put(sinkRecords);
-                    }
-                }
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void sink() {
-        Properties props = new Properties();
-        try {
-            props.load(RealtimeApplication.class.getResourceAsStream("/sink.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Configuration config = Configuration.from(props);
-        JdbcSinkConnector connector = new JdbcSinkConnector();
-        connector.initialize(new ConnectorContext() {
-            @Override
-            public void requestTaskReconfiguration() {
-
-            }
-
-            @Override
-            public void raiseError(Exception e) {
-                e.printStackTrace();
-            }
-        });
-        connector.start(config.asMap());
-        List<Map<String, String>> taskConfigs = connector.taskConfigs(1);
-        sinkTask = new JdbcSinkTask();
-        sinkTask.initialize(new SinkTaskContext() {
-            @Override
-            public Map<String, String> configs() {
-                return null;
-            }
-
-            @Override
-            public void offset(Map<TopicPartition, Long> offsets) {
-
-            }
-
-            @Override
-            public void offset(TopicPartition tp, long offset) {
-
-            }
-
-            @Override
-            public void timeout(long timeoutMs) {
-
-            }
-
-            @Override
-            public Set<TopicPartition> assignment() {
-                return null;
-            }
-
-            @Override
-            public void pause(TopicPartition... partitions) {
-
-            }
-
-            @Override
-            public void resume(TopicPartition... partitions) {
-
-            }
-
-            @Override
-            public void requestCommit() {
-
-            }
-        });
-        sinkTask.start(taskConfigs.get(0));
-        SinkRecord record = createSinkRecord();
-        transform = new ExtractNewRecordState<>();
-        Map<String, String> params = new HashMap<>(1);
-        params.put("transforms.unwrap.type", "io.debezium.transforms.ExtractNewRecordState");
-        transform.configure(params);
     }
 
     public void transformTest() {

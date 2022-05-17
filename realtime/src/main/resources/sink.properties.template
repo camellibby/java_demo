@@ -1,23 +1,23 @@
-connection.url=jdbc:mysql://ip:port/abc
-connection.user=user
-connection.password=password
-table.name.format=abc.person_copy1
+connection.url=jdbc:mysql://127.0.0.1:3306/test
+connection.user=root
+connection.password=123456
+table.name.format=test.user_copy1
 
-name=sink
 tasks.max=1
+name=sink_mysql
 connector.class=io.confluent.connect.jdbc.JdbcSinkConnector
 confluent.topic.bootstrap.servers=localhost:9092
-topics=mysql71.abc.person
+topics=source.test.user_copy1
 
 transforms=ExtractNewRecordState,ReplaceKeyField,ReplaceValueField
 transforms.unwrap.type=io.debezium.transforms.ExtractNewRecordState
 transforms.unwrap.drop.tombstones=false
 transforms.ReplaceKeyField.type=org.apache.kafka.connect.transforms.ReplaceField$Key
-transforms.ReplaceKeyField.include=id,name,create_time,remart
-transforms.ReplaceKeyField.renames=a:a,b:b,c:c,d:d
+transforms.ReplaceKeyField.include=id,name,age
+transforms.ReplaceKeyField.renames=id:id,name:name,age:age
 transforms.ReplaceValueField.type=org.apache.kafka.connect.transforms.ReplaceField$Value
-transforms.ReplaceValueField.include=a,b,c,d
-transforms.ReplaceValueField.renames=a:a,b:b,c:c,d:d
+transforms.ReplaceValueField.include=id,name,age
+transforms.ReplaceValueField.renames=id:id,name:name,age:age
 
 auto.create=true
 insert.mode=upsert
