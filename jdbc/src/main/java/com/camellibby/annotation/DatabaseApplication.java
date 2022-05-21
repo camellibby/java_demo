@@ -10,9 +10,9 @@ import java.util.List;
  * @author luoxinliang
  */
 @ComponentScan("com.camellibby.annotation")
-public class AnnotationApplication {
+public class DatabaseApplication {
     public static void main(String[] args) {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotationApplication.class);
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(DatabaseApplication.class);
         UserService userService = ctx.getBean(UserService.class);
 
         userService.reset();

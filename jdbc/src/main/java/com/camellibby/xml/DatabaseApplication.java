@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author luoxinliang
  */
-public class XmlApplication {
+public class DatabaseApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-jdbc.xml");
         UserService userService = (UserService) ctx.getBean("userService");

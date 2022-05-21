@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author luoxinliang
  */
-public class TransactionXmlApplication {
+public class TransactionApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-tx.xml");
         UserService userService = (UserService) ctx.getBean("userService");

@@ -14,9 +14,9 @@ import java.util.List;
  */
 @EnableTransactionManagement
 @ComponentScan("com.camellibby.annotation")
-public class TransactionAnnotationApplication {
+public class TransactionApplication {
     public static void main(String[] args) {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(TransactionAnnotationApplication.class);
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(TransactionApplication.class);
         UserService userService = ctx.getBean(UserService.class);
 
         userService.reset();
