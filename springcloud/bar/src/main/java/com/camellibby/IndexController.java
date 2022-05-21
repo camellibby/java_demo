@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 @AllArgsConstructor
 public class IndexController {
-    private final FooConfig fooConfig;
+    private final BarConfig barConfig;
 
     @GetMapping("props")
     public String getProps() {
-        return fooConfig.getName();
+        return barConfig.getName();
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "foo")
+@ConfigurationProperties(prefix = "bar")
 @RefreshScope
-public class FooConfig {
+public class BarConfig {
     private String name;
 }
