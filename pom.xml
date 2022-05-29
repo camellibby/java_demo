@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>common</module>
-        <module>spring</module>
-        <module>jdbc</module>
-        <module>realtime</module>
-        <module>thread</module>
-        <module>nio</module>
-        <module>springboot</module>
+<!--        <module>common</module>-->
+<!--        <module>spring</module>-->
+<!--        <module>jdbc</module>-->
+<!--        <module>realtime</module>-->
+<!--        <module>thread</module>-->
+<!--        <module>nio</module>-->
+<!--        <module>springboot</module>-->
         <module>springcloud</module>
     </modules>
 

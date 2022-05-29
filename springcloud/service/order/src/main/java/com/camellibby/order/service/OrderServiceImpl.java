@@ -14,34 +14,27 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
-    private final StorageApi storageApi;
-    private final AccountApi accountApi;
 
     /**
      * 创建订单
      *
-     * @param order
+     * @param userId
+     * @param productId
+     * @param count
+     * @param money
      * @return 测试结果：
      * 1.添加本地事务：仅仅扣减库存
      * 2.不添加本地事务：创建订单，扣减库存
      */
     @Override
     @GlobalTransactional(rollbackFor = Exception.class)
-    public void create(Order order) {
+    public void create(Long userId, Long productId, Integer count, Long money) {
         log.info("------->交易开始");
-        //本地方法
-        orderMapper.create(order);
 
-        //远程方法 扣减库存
-        storageApi.decrease(order.getProductId(), order.getCount());
-
-        //远程方法 扣减账户余额
-
-        log.info("------->扣减账户开始order中");
-        accountApi.decrease(order.getUserId(), order.getMoney());
-        log.info("------->扣减账户结束order中");
-
-        log.info("------->交易结束");
+        //远程方法 生成订单
+        log.info("------->生成订单开始");
+        orderMapper.create(userId, productId, count, money);
+        log.info("------->生成订单结束");
     }
 
     /**

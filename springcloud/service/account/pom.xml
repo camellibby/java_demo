@@ -18,26 +18,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
-            <scope>provided</scope>
+            <groupId>com.camellibby</groupId>
+            <artifactId>pangu-common-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>demo-common-starter</artifactId>
+            <artifactId>pangu-alibaba-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>demo-alibaba-starter</artifactId>
+            <artifactId>pangu-web-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>demo-web-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.camellibby</groupId>
-            <artifactId>demo-data-starter</artifactId>
+            <artifactId>pangu-data-starter</artifactId>
         </dependency>
     </dependencies>
 
@@ -45,7 +39,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.camellibby</groupId>
-                <artifactId>demo-dependencies</artifactId>
+                <artifactId>pangu-dependencies</artifactId>
                 <version>1.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>

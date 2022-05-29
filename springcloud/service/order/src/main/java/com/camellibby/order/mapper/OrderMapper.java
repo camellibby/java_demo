@@ -10,10 +10,13 @@ public interface OrderMapper {
     /**
      * 创建订单
      *
-     * @param order
+     * @param userId
+     * @param productId
+     * @param count
+     * @param money
      * @return
      */
-    void create(Order order);
+    void create(@Param("userId") Long userId, @Param("productId") Long productId, @Param("count") Integer count, @Param("money") Long money);
 
     /**
      * 修改订单金额

@@ -18,29 +18,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.july-cloud</groupId>
+            <groupId>com.ieooc.nacos</groupId>
             <artifactId>nacos-console</artifactId>
-            <version>2.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-beans</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-tx</artifactId>
-                    <groupId>org.springframework</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>5.1.7.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>5.1.7.RELEASE</version>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

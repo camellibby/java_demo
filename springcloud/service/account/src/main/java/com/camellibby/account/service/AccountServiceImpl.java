@@ -3,7 +3,7 @@ package com.camellibby.account.service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.camellibby.account.entity.Account;
-import com.camellibby.account.feign.OrderApi;
+import com.camellibby.account.feign.BusinessApi;
 import com.camellibby.account.mapper.AccountMapper;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.AllArgsConstructor;
@@ -14,9 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements AccountService {
-    private OrderApi orderApi;
+    private BusinessApi businessApi;
 
-    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void decrease(Long userId, Long money) {
         Account account = baseMapper.selectOne(Wrappers.lambdaQuery(Account.class)
@@ -30,7 +29,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         //修改订单状态，此调用会导致调用成环
         log.info("修改订单状态开始");
-        String mes = orderApi.update(userId, (money * 9) / 100, 0);
+        String mes = businessApi.update(userId, (money * 9) / 100, 0);
         log.info("修改订单状态结束：{}", mes);
     }
 }

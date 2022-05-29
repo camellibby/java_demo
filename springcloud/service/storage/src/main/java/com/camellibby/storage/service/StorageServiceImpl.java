@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.camellibby.storage.entity.Storage;
 import com.camellibby.storage.mapper.StorageMapper;
-import io.seata.spring.annotation.GlobalTransactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, Storage> impl
      * @param count     数量
      * @return
      */
-    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void decrease(Long productId, Integer count) {
         Storage storage = baseMapper.selectOne(Wrappers.lambdaQuery(Storage.class)

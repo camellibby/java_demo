@@ -1,6 +1,6 @@
-package com.camellibby.order.service;
+package com.camellibby.business.service;
 
-public interface OrderService {
+public interface BusinessService {
     /**
      * 创建订单
      *

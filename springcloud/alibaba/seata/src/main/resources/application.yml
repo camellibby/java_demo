@@ -35,13 +35,27 @@ seata:
       dir: springcloud/alibaba/seata
     db:
       datasource: druid
-      dbType: mysql
-      driverClassName: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/seata
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/seata?rewriteBatchedStatements=true
       user: root
       password: 123456
+      min-conn: 5
+      max-conn: 100
+      global-table: global_table
+      branch-table: branch_table
+      lock-table: lock_table
+      distributed-lock-table: distributed_lock
+      query-limit: 100
+      max-wait: 5000
   server:
     service-port: 8091 #If not configured, the default is '${server.port} + 1000'
+    vgroup-mapping:
+      seata-service-group: default # TC 集群（必须与seata-server保持一致）
+    enable-degrade: false # 降级开关
+    disable-global-transaction: false # 禁用全局事务（默认false）
+    grouplist:
+      default: 127.0.0.1:8091
   security:
     secretKey: SeataSecretKey0c382ef121d778043159209298fd40bf3850a017
     tokenValidityInMilliseconds: 1800000
