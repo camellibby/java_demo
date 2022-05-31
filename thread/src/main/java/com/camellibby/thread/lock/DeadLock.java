@@ -1,6 +1,6 @@
-package com.camellibby.thread;
+package com.camellibby.thread.lock;
 
-public class DeadThread {
+public class DeadLock {
     static final Object lockOne = new Object();
     static final Object lockTwo = new Object();
 
