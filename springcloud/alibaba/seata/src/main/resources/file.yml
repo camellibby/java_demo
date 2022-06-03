@@ -24,11 +24,11 @@ store:
     datasource: druid
     ## mysql/oracle/postgresql/h2/oceanbase etc.
     dbType: mysql
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.jdbc.cj.Driver
     ## if using mysql to store the data, recommend add rewriteBatchedStatements=true in jdbc connection param
     url: jdbc:mysql://127.0.0.1:3306/seata?rewriteBatchedStatements=true
-    user: mysql
-    password: mysql
+    user: root
+    password: 123456
     minConn: 5
     maxConn: 100
     globalTable: global_table
@@ -39,16 +39,16 @@ store:
   ## redis store property
   redis:
     mode: "single"
-      single:
-        host: "127.0.0.1"
-        port: "6379"
-      sentinel:
-        masterName: ""
-        sentinelHosts: ""
-      password: ""
-      database: "0"
-      minConn: 1
-      maxConn: 10
-      maxTotal: 100
-      queryLimit: 100
+    single:
+      host: "127.0.0.1"
+      port: "6379"
+    sentinel:
+      masterName: ""
+      sentinelHosts: ""
+    password: ""
+    database: "0"
+    minConn: 1
+    maxConn: 10
+    maxTotal: 100
+    queryLimit: 100
 

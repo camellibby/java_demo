@@ -6,7 +6,7 @@ registry:
     application: seata
     serverAddr: 127.0.0.1:8848
     group: pangu
-    namespace: seata
+    namespace:
     cluster: default
     username: nacos
     password: nacos
@@ -59,11 +59,11 @@ config:
 
   nacos:
     serverAddr: 127.0.0.1:8848
-    namespace: seata
+    namespace:
     group: pangu
     username: nacos
     password: nacos
-    dataId: seata.yml
+    dataId: seata-server.properties
 
   consul:
     serverAddr: 127.0.0.1:8500
@@ -80,7 +80,7 @@ config:
     connectTimeout: 2000
     username: 
     password:
-    nodePath: /seata/seata.properties
+    nodePath: /seata/seata-server.properties
   
   etcd3:
     serverAddr: http://localhost:2379

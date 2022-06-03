@@ -1,0 +1,88 @@
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.camellibby.order.entity
+  global-config:
+    db-config:
+      field-strategy: not-empty
+      id-type: auto
+      db-type: mysql
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    auto-mapping-unknown-column-behavior: none
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    
+seata:
+#  enabled: true
+#  application-id: seata
+  tx-service-group: default_tx_group
+#  enable-auto-data-source-proxy: true
+#  data-source-proxy-mode: AT
+#  use-jdk-proxy: false
+  config:
+    type: nacos
+    consul:
+      server-addr: 127.0.0.1:8500
+    apollo:
+      apollo-meta: http://192.168.1.204:8801
+      app-id: seata-server
+      namespace: application
+      apollo-accesskey-secret: ""
+    etcd3:
+      server-addr: http://localhost:2379
+    nacos:
+      namespace: 
+      server-addr: 127.0.0.1:8848
+      group: pangu
+      username: nacos
+      password: nacos
+      data-id: seata-client.properties
+    zk:
+      server-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username: ""
+      password: ""
+    custom:
+      name: ""
+  registry:
+    type: nacos
+    file:
+      name: file.conf
+    consul:
+      server-addr: 127.0.0.1:8500
+      acl-token: ""
+    etcd3:
+      server-addr: http://localhost:2379
+    eureka:
+      weight: 1
+      service-url: http://localhost:8761/eureka
+    nacos:
+      application: seata
+      server-addr: 127.0.0.1:8848
+      group : pangu
+      namespace: 
+      username: nacos
+      password: nacos
+    redis:
+      server-addr: localhost:6379
+      db: 0
+      password: ""
+      timeout: 0
+    sofa:
+      server-addr: 127.0.0.1:9603
+      region: DEFAULT_ZONE
+      datacenter: DefaultDataCenter
+      group: SEATA_GROUP
+      address-wait-time: 3000
+      application: default
+    zk:
+      server-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username: ""
+      password: ""
+    custom:
+      name: ""
+#  log:
+#    exception-rate: 100

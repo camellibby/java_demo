@@ -29,10 +29,10 @@
             <groupId>com.camellibby</groupId>
             <artifactId>pangu-web-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.camellibby</groupId>
-            <artifactId>pangu-data-starter</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.camellibby</groupId>-->
+<!--            <artifactId>pangu-data-starter</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <dependencyManagement>
