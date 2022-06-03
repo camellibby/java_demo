@@ -1,6 +1,6 @@
 # Account
-DROP SCHEMA IF EXISTS db_account;
-CREATE SCHEMA db_account;
+DROP DATABASE IF EXISTS db_account;
+CREATE DATABASE db_account;
 USE db_account;
 
 CREATE TABLE `account`
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `undo_log`
     DEFAULT CHARSET = utf8mb4 COMMENT ='AT transaction mode undo table';
 
 # Order
-DROP SCHEMA IF EXISTS db_order;
-CREATE SCHEMA db_order;
+DROP DATABASE IF EXISTS db_order;
+CREATE DATABASE db_order;
 USE db_order;
 
 CREATE TABLE `order`
@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS `undo_log`
     DEFAULT CHARSET = utf8mb4 COMMENT ='AT transaction mode undo table';
 
 # storage
-DROP SCHEMA IF EXISTS db_storage;
-CREATE SCHEMA db_storage;
+DROP DATABASE IF EXISTS db_storage;
+CREATE DATABASE db_storage;
 USE db_storage;
 
 CREATE TABLE `storage`
@@ -93,3 +93,15 @@ CREATE TABLE IF NOT EXISTS `undo_log`
     ) ENGINE = InnoDB
     AUTO_INCREMENT = 1
     DEFAULT CHARSET = utf8mb4 COMMENT ='AT transaction mode undo table';
+
+select * from db_order.order;
+select * from db_account.account;
+select * from db_storage.storage;
+
+select * from db_account.undo_log;
+select * from db_storage.undo_log;
+select * from db_order.undo_log;
+
+select * from seata.branch_table;
+select * from seata.global_table;
+select * from seata.lock_table;

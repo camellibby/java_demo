@@ -9,7 +9,6 @@ spring:
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
         group: pangu
       config:
-        enabled: false
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         group: pangu
         file-extension: yml
@@ -17,6 +16,3 @@ spring:
           - data-id: application.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: pangu
-
-seata:
-  tx-service-group: seata-service-group

@@ -1,4 +1,9 @@
 -- -------------------------------- The script used when storeMode is 'db' --------------------------------
+
+DROP DATABASE IF EXISTS seata;
+CREATE DATABASE seata;
+USE seata;
+
 -- the table to store GlobalSession data
 CREATE TABLE IF NOT EXISTS `global_table`
 (
@@ -14,10 +19,10 @@ CREATE TABLE IF NOT EXISTS `global_table`
     `gmt_create`                DATETIME,
     `gmt_modified`              DATETIME,
     PRIMARY KEY (`xid`),
-    KEY `idx_status_gmt_modified` (`status` , `gmt_modified`),
+    KEY `idx_gmt_modified_status` (`gmt_modified`, `status`),
     KEY `idx_transaction_id` (`transaction_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  DEFAULT CHARSET = utf8;
 
 -- the table to store BranchSession data
 CREATE TABLE IF NOT EXISTS `branch_table`
@@ -36,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `branch_table`
     PRIMARY KEY (`branch_id`),
     KEY `idx_xid` (`xid`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  DEFAULT CHARSET = utf8;
 
 -- the table to store lock data
 CREATE TABLE IF NOT EXISTS `lock_table`
@@ -48,26 +53,9 @@ CREATE TABLE IF NOT EXISTS `lock_table`
     `resource_id`    VARCHAR(256),
     `table_name`     VARCHAR(32),
     `pk`             VARCHAR(36),
-    `status`         TINYINT      NOT NULL DEFAULT '0' COMMENT '0:locked ,1:rollbacking',
     `gmt_create`     DATETIME,
     `gmt_modified`   DATETIME,
     PRIMARY KEY (`row_key`),
-    KEY `idx_status` (`status`),
-    KEY `idx_branch_id` (`branch_id`),
-    KEY `idx_xid_and_branch_id` (`xid` , `branch_id`)
+    KEY `idx_branch_id` (`branch_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `distributed_lock`
-(
-    `lock_key`       CHAR(20) NOT NULL,
-    `lock_value`     VARCHAR(20) NOT NULL,
-    `expire`         BIGINT,
-    primary key (`lock_key`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('AsyncCommitting', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryCommitting', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryRollbacking', ' ', 0);
-INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('TxTimeoutCheck', ' ', 0);
+  DEFAULT CHARSET = utf8;
