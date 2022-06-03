@@ -1,0 +1,19 @@
+server:
+  port: 8863
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
+        group: pangu
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        group: pangu
+        file-extension: yml
+        extension-configs:
+          - data-id: application.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: pangu
