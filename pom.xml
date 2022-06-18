@@ -16,7 +16,7 @@
 <!--        <module>thread</module>-->
 <!--        <module>nio</module>-->
         <module>springboot</module>
-        <module>springcloud</module>
+<!--        <module>springcloud</module>-->
     </modules>
 
     <properties>
