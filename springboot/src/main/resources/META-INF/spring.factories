@@ -1,0 +1,16 @@
+# Bootstrap Registry Initializer
+org.springframework.boot.BootstrapRegistryInitializer=\
+com.camellibby.springboot.component.DemoBootstrapRegistryInitializer
+
+# Application Context Initializers
+org.springframework.context.ApplicationContextInitializer=\
+com.camellibby.springboot.component.DemoApplicationContextInitializer
+
+# Application Listener
+org.springframework.context.ApplicationListener=\
+com.camellibby.springboot.component.DemoApplicationEnvironmentPreparedListener
+
+
+# Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.camellibby.springboot.component.DemoEnvironmentPostProcessor
