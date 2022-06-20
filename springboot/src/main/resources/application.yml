@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
   web:
@@ -10,3 +10,7 @@ spring:
         - "classpath:/static/"
         - "classpath:/public/"
         - "classpath:/templates/"
+  config:
+    location: "classpath:/application.yml"
+    additional-location: "classpath:/application.yml"
+    import: "classpath:/application.yml"
