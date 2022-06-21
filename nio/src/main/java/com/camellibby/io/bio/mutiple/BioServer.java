@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BioServer {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(50);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(8888);
@@ -36,11 +36,10 @@ public class BioServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String msg = reader.readLine();
                 System.out.println(msg);
-                Thread.sleep(5000);
                 OutputStream outputStream = socket.getOutputStream();
                 outputStream.write(("你好，" + msg + "\n").getBytes(StandardCharsets.UTF_8));
                 outputStream.flush();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

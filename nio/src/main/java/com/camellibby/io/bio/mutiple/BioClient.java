@@ -7,10 +7,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BioClient {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(50);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             Socket socket = new Socket("127.0.0.1", 8888);
             executorService.submit(new SocketHandler(socket, "thread" + i));
             System.out.println(i);
