@@ -29,14 +29,9 @@ public class NioServerRegister {
                 iterator.remove();
                 if (key.isAcceptable()) {
                     acceptHandler(key, selector);
-                } else if (key.isReadable()) {
+                }
+                if (key.isReadable()) {
                     readHandler(key);
-                } else if (key.isConnectable()) {
-                    System.out.println("connected");
-                } else if (key.isReadable()) {
-                    System.out.println("read");
-                } else if (key.isWritable()) {
-                    System.out.println("write");
                 }
             }
         }
