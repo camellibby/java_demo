@@ -1,4 +1,4 @@
-package com.camellibby.io.bio.mutiple;
+package com.camellibby.io.bio.multiple;
 
 import java.io.*;
 import java.net.Socket;
@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class BioClient {
+public class BioClientMultiple {
     private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -37,6 +37,7 @@ public class BioClient {
                 outputStream.flush();
                 //读取服务器返回的消息
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                // 阻塞
                 String msg = reader.readLine();
                 System.out.println("服务器：" + msg);
             } catch (IOException e) {

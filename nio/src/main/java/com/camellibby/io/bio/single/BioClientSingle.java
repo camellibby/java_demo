@@ -3,7 +3,7 @@ package com.camellibby.io.bio.single;
 import java.io.*;
 import java.net.Socket;
 
-public class BioClient {
+public class BioClientSingle {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("127.0.0.1", 8888);
 
@@ -16,6 +16,7 @@ public class BioClient {
 
         //读取服务器返回的消息
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        // 阻塞
         String msg = reader.readLine();
 
         System.out.println("服务器：" + msg);
