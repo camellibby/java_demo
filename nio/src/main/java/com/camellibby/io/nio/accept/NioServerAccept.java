@@ -30,7 +30,6 @@ public class NioServerAccept {
                             byte[] bytes = new byte[buffer.limit()];
                             buffer.get(bytes, 0, buffer.limit());
                             String msg = new String(bytes);
-                            System.out.println(msg.length());
                             System.out.println("客户端：" + msg);
 
                             buffer.clear();
