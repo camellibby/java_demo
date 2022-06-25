@@ -34,12 +34,13 @@ public class BioServerMultiple {
                 if (socket.isClosed()) {
                     return;
                 }
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                byte[] bytes = new byte[1024];
                 // 阻塞
-                String msg = reader.readLine();
+                socket.getInputStream().read(bytes, 0, 1024);
+                String msg = new String(bytes);
                 System.out.println(msg);
                 OutputStream outputStream = socket.getOutputStream();
-                outputStream.write(("你好，" + msg + "\n").getBytes(StandardCharsets.UTF_8));
+                outputStream.write(("你好，" + msg).getBytes(StandardCharsets.UTF_8));
                 outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -30,15 +30,14 @@ public class BioClientMultiple {
 
         @Override
         public void run() {
-            //向服务器端发送一条消息
             try {
                 OutputStream outputStream = socket.getOutputStream();
-                outputStream.write((name + "\n").getBytes(StandardCharsets.UTF_8));
+                outputStream.write((name).getBytes(StandardCharsets.UTF_8));
                 outputStream.flush();
-                //读取服务器返回的消息
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                byte[] bytes = new byte[1024];
                 // 阻塞
-                String msg = reader.readLine();
+                socket.getInputStream().read(bytes, 0, 1024);
+                String msg = new String(bytes);
                 System.out.println("服务器：" + msg);
             } catch (IOException e) {
                 e.printStackTrace();
