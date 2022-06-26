@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-public class NioClientAccept {
+public class NioAcceptClient {
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
