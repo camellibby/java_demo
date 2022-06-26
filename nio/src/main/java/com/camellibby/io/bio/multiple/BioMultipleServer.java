@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class BioServerMultiple {
+public class BioMultipleServer {
     private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 
     public static void main(String[] args) throws IOException {

@@ -7,7 +7,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
-public class NioServerAccept {
+public class NioAcceptServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         ServerSocketChannel server = ServerSocketChannel.open();
         server.socket().bind(new InetSocketAddress(9999));

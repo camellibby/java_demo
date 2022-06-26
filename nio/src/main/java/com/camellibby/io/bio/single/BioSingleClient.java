@@ -3,7 +3,7 @@ package com.camellibby.io.bio.single;
 import java.io.*;
 import java.net.Socket;
 
-public class BioClientSingle {
+public class BioSingleClient {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("127.0.0.1", 8888);
 
