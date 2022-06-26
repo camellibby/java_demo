@@ -19,6 +19,7 @@ public class NioRegisterServer {
         server.register(selector, SelectionKey.OP_ACCEPT);
         System.out.println("启动服务器....");
         while (true) {
+            // 阻塞
             if (selector.select() <= 0) {
                 System.out.println("等待中....");
                 continue;
