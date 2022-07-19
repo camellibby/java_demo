@@ -22,6 +22,7 @@
         <module>order</module>
         <module>storage</module>
         <module>business</module>
+        <module>foo</module>
     </modules>
 
 </project>
