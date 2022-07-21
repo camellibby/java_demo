@@ -15,7 +15,7 @@ Please enter the host of nacos.
 请输入nacos的host [localhost]:
 >>>
 Please enter the port of nacos.
-请输入nacos的port [8848]:
+请输入nacos的port [8861]:
 >>>
 Please enter the group of nacos.
 请输入nacos的group [pangu]:
@@ -35,14 +35,14 @@ Are you sure to continue? [y/n]
 - Non-Interactive Mode
 
 ```bash
-sh nacos/nacos-config.sh -h localhost -p 8848 -g pangu -t seata -u nacos -w nacos
+sh nacos/nacos-config.sh -h localhost -p 8861 -g pangu -t seata -u nacos -w nacos
 ```
 
 Parameter Description:
 
 -h: host, the default value is localhost.
 
--p: port, the default value is 8848.
+-p: port, the default value is 8861.
 
 -g: Configure grouping, the default value is 'pangu'.
 
@@ -67,5 +67,5 @@ This command will generate interactive configuration mode like nacos-config-inte
 
 
 ```bash
-python ${SEATAPATH}/script/config-center/nacos/nacos-config.py localhost:8848
+python ${SEATAPATH}/script/config-center/nacos/nacos-config.py localhost:8861
 ```

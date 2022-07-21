@@ -45,7 +45,7 @@ if [ -z ${host} ]; then
     host=localhost
 fi
 if [ -z ${port} ]; then
-    port=8848
+    port=8861
 fi
 if [ -z ${group} ]; then
     group="SEATA_GROUP"

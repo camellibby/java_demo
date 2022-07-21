@@ -9,14 +9,14 @@ import re
 def get_params() -> dict:
     params = {
         'host': '127.0.0.1',
-        'port': '8848',
+        'port': '8861',
         'tenant': '',
         'group': 'SEATA_GROUP',
         'username': '',
         'password': ''
     }
     host = input("Please enter the host of nacos.\n请输入nacos的host [localhost]\n>>> ")
-    port = input("Please enter the port of nacos.\n请输入nacos的port [8848]\n>>> ")
+    port = input("Please enter the port of nacos.\n请输入nacos的port [8861]\n>>> ")
     group = input("Please enter the group of nacos.\n请输入nacos的group [SEATA_GROUP]\n>>> ")
     tenant = input("Please enter the tenant of nacos.\n请输入nacos的tenant\n>>> ")
     username = input("Please enter the username of nacos.\n请输入nacos的username\n>>> ")

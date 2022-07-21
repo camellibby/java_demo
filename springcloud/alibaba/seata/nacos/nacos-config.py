@@ -11,7 +11,7 @@ import re
 def get_params() -> dict:
     params = {
         '-h': '127.0.0.1',
-        '-p': '8848',
+        '-p': '8861',
         '-t': '',
         '-g': 'pangu',
         '-u': '',

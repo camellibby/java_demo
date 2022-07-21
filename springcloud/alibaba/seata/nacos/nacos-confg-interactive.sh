@@ -18,7 +18,7 @@
 # shellcheck disable=SC2039,SC2162,SC2046,SC2013,SC2002,SC2086
 echo -e "Please enter the host of nacos.\n请输入nacos的host [localhost]:"
 read -p ">>> " host
-echo -e "Please enter the port of nacos.\n请输入nacos的port [8848]:"
+echo -e "Please enter the port of nacos.\n请输入nacos的port [8861]:"
 read -p ">>> " port
 echo -e "Please enter the group of nacos.\n请输入nacos的group [SEATA_GROUP]:"
 read -p ">>> " group
@@ -36,7 +36,7 @@ case $input in
             host=localhost
         fi
         if [ -z ${port} ]; then
-            port=8848
+            port=8861
         fi
         if [ -z ${group} ]; then
             group="SEATA_GROUP"
