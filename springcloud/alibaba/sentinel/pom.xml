@@ -3,26 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>springcloud</artifactId>
+        <artifactId>alibaba</artifactId>
         <groupId>com.camellibby</groupId>
         <version>1.0.0</version>
     </parent>
-    <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service</artifactId>
+    <artifactId>sentinel</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <modules>
-        <module>account</module>
-        <module>order</module>
-        <module>storage</module>
-        <module>business</module>
-        <module>foo</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-core</artifactId>
+            <version>1.8.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jeecgframework.cloud</groupId>
+            <artifactId>sentinel-dashboard</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+    </dependencies>
 </project>
