@@ -39,13 +39,13 @@
     <dependencyManagement>
         <dependencies>
             <!-- spring framework -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring-framework.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework</groupId>-->
+<!--                <artifactId>spring-framework-bom</artifactId>-->
+<!--                <version>${spring-framework.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <!-- spring boot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

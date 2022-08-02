@@ -1,0 +1,9 @@
+registry:
+  type: file
+  file:
+    name: file.yml
+  
+config:
+  type: file
+  file:
+    name: file.yml

@@ -31,3 +31,5 @@ test.*.db
 /realtime/src/main/resources/sink.properties
 /realtime/offsets.dat
 /realtime/src/main/resources/app.properties
+
+!nacos_config.zip

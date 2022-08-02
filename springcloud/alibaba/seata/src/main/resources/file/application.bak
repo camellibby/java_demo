@@ -69,3 +69,42 @@ seata:
     session:
       branch-async-queue-size: 5000 #branch async remove queue size
       enable-branch-async-remove: false #enable to asynchronous remove branchSession
+#  store:
+#    # support: file 、 db 、 redis
+#    mode: db
+#    file:
+#      dir: sessionStore
+#      max-branch-session-size: 16384
+#      max-global-session-size: 512
+#      file-write-buffer-cache-size: 16384
+#      session-reload-read-size: 100
+#      flush-disk-mode: async
+#    db:
+#      datasource: druid
+#      db-type: mysql
+#      driver-class-name: com.mysql.jdbc.Driver
+#      url: jdbc:mysql://127.0.0.1:3306/seata?rewriteBatchedStatements=true
+#      user: root
+#      password: 123456
+#      min-conn: 5
+#      max-conn: 100
+#      global-table: global_table
+#      branch-table: branch_table
+#      lock-table: lock_table
+#      distributed-lock-table: distributed_lock
+#      query-limit: 100
+#      max-wait: 5000
+#  metrics:
+#    enabled: false
+#    registry-type: compact
+#    exporter-list: prometheus
+#    exporter-prometheus-port: 9898
+#  transport:
+#    rpc-tc-request-timeout: 30000
+#    enable-tc-server-batch-send-response: false
+#    shutdown:
+#      wait: 3
+#    thread-factory:
+#      boss-thread-prefix: NettyBoss
+#      worker-thread-prefix: NettyServerNIOWorker
+#      boss-thread-size: 1

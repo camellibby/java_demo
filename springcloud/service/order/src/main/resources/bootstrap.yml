@@ -16,3 +16,6 @@ spring:
           - data-id: application.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: pangu
+          - data-id: seata-application.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+            group: pangu

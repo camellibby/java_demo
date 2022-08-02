@@ -94,14 +94,14 @@ CREATE TABLE IF NOT EXISTS `undo_log`
     AUTO_INCREMENT = 1
     DEFAULT CHARSET = utf8mb4 COMMENT ='AT transaction mode undo table';
 
-select * from db_order.order;
-select * from db_account.account;
-select * from db_storage.storage;
+-- select * from db_order.order;
+-- select * from db_account.account;
+-- select * from db_storage.storage;
 
-select * from db_account.undo_log;
-select * from db_storage.undo_log;
-select * from db_order.undo_log;
+-- select * from db_account.undo_log;
+-- select * from db_storage.undo_log;
+-- select * from db_order.undo_log;
 
-select * from seata.branch_table;
-select * from seata.global_table;
-select * from seata.lock_table;
+-- select * from seata.branch_table;
+-- select * from seata.global_table;
+-- select * from seata.lock_table;

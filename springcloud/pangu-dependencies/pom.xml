@@ -13,10 +13,10 @@
     <artifactId>pangu-dependencies</artifactId>
 
     <modules>
-        <module>pangu-common-starter</module>
-        <module>pangu-web-starter</module>
-        <module>pangu-data-starter</module>
-        <module>pangu-alibaba-starter</module>
+        <module>pangu-starter-alibaba</module>
+        <module>pangu-starter-common</module>
+        <module>pangu-starter-web</module>
+        <module>pangu-starter-data</module>
     </modules>
 
     <properties>

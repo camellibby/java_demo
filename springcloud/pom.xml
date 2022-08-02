@@ -21,7 +21,7 @@
         <module>alibaba</module>
         <module>pangu-dependencies</module>
         <module>service</module>
-        <module>gateway</module>
+<!--        <module>gateway</module>-->
     </modules>
 
 </project>
