@@ -27,9 +27,9 @@ target
 *.iml
 test.*.db
 /realtime/db_history.dat
+/realtime/offsets.dat
 /realtime/src/main/resources/source.properties
 /realtime/src/main/resources/sink.properties
-/realtime/offsets.dat
 /realtime/src/main/resources/app.properties
 
 !nacos_config.zip
