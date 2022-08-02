@@ -23,7 +23,7 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, Storage> impl
     public void decrease(Long productId, Integer count) {
         Storage storage = baseMapper.selectOne(Wrappers.lambdaQuery(Storage.class)
                 .eq(Storage::getProductId, productId));
-        if (storage.getTotal() < count) {
+        if (storage.getResidue() < count) {
             throw new IllegalArgumentException("库存不足");
         }
         log.info("------->扣减库存开始");
