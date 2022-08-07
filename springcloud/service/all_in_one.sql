@@ -78,7 +78,7 @@ CREATE TABLE `storage`
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 INSERT INTO `storage` (`id`, `product_id`, `total`, `used`, `residue`)
-VALUES ('1', '1', '100', '0', '100');
+VALUES ('1', '1', '10', '0', '10');
 
 CREATE TABLE IF NOT EXISTS `undo_log`
 (

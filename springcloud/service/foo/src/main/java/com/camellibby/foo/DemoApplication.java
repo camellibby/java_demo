@@ -13,8 +13,8 @@ import java.util.List;
 
 public class DemoApplication {
     public static void main(String[] args) throws InterruptedException {
-        // -Dcsp.sentinel.dashboard.server=localhost:8001 -Dproject.name=demo
-        System.getProperties().put("csp.sentinel.dashboard.server", "localhost:8001");
+        // -Dcsp.sentinel.dashboard.server=localhost:8862 -Dproject.name=demo
+        System.getProperties().put("csp.sentinel.dashboard.server", "localhost:8862");
         System.getProperties().put("project.name", "demo");
         // 配置规则.
         initFlowRules();
