@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo")
 @RestController
 public class DemoController {
-    @GetMapping("/")
+    @GetMapping("/index")
     @SentinelResource("HelloWorld")
     public String index() {
         return "index";

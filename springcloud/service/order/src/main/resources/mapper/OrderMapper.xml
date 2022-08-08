@@ -7,18 +7,16 @@
         <result column="product_id" property="productId" jdbcType="BIGINT"/>
         <result column="count" property="count" jdbcType="INTEGER"/>
         <result column="money" property="money" jdbcType="DECIMAL"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
     <insert id="create">
-        INSERT INTO `order` (id, `user_id`, `product_id`, `count`, `money`, `status`)
-        VALUES (NULL, #{userId}, #{productId}, #{count}, #{money}, 0);
+        INSERT INTO `order` (id, `user_id`, `product_id`, `count`, `money`)
+        VALUES (NULL, #{userId}, #{productId}, #{count}, #{money});
     </insert>
 
     <update id="update">
         UPDATE `order`
         SET money  = money - #{money},
             status = 1
-        where user_id = #{userId}
-          and status = #{status};
+        where user_id = #{userId};
     </update>
 </mapper>
