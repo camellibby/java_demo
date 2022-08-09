@@ -19,22 +19,22 @@
         <dependencies>
             <dependency>
                 <groupId>com.camellibby</groupId>
-                <artifactId>pangu-common-starter</artifactId>
+                <artifactId>pangu-starter-alibaba</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.camellibby</groupId>
-                <artifactId>pangu-web-starter</artifactId>
+                <artifactId>pangu-starter-common</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.camellibby</groupId>
-                <artifactId>pangu-data-starter</artifactId>
+                <artifactId>pangu-starter-web</artifactId>
                 <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.camellibby</groupId>
-                <artifactId>pangu-alibaba-starter</artifactId>
+                <artifactId>pangu-starter-data</artifactId>
                 <version>1.0.0</version>
             </dependency>
         </dependencies>

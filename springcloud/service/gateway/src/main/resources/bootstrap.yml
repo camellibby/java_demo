@@ -7,11 +7,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        enabled: false
+        enabled: true
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8861}
         group: pangu
       config:
-        enabled: false
+        enabled: true
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         group: pangu
         file-extension: yml

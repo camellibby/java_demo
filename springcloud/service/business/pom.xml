@@ -20,15 +20,15 @@
     <dependencies>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>pangu-common-starter</artifactId>
+            <artifactId>pangu-starter-alibaba</artifactId>
         </dependency>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>pangu-alibaba-starter</artifactId>
+            <artifactId>pangu-starter-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.camellibby</groupId>
-            <artifactId>pangu-web-starter</artifactId>
+            <artifactId>pangu-starter-web</artifactId>
         </dependency>
     </dependencies>
 </project>
