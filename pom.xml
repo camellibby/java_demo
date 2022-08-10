@@ -26,10 +26,11 @@
     </properties>
 
     <repositories>
+        <!--阿里云主仓库，代理了maven central和jcenter仓库-->
         <repository>
-            <id>aliyun-maven</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <id>aliyun-public</id>
+            <name>aliyun-public</name>
+            <url>https://maven.aliyun.com/repository/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
