@@ -24,6 +24,7 @@
         <module>storage</module>
         <module>business</module>
         <module>foo</module>
+        <module>bar</module>
     </modules>
 
 </project>
