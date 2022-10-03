@@ -16,4 +16,9 @@ public class DemoController {
     public String index() {
         return demoService.index();
     }
+
+    @GetMapping("sentinel")
+    public String sentinel() {
+        return "sentinel";
+    }
 }

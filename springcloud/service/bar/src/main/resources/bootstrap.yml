@@ -19,3 +19,14 @@ spring:
           - data-id: application.${spring.cloud.nacos.config.file-extension}
             refresh: true
             group: pangu
+    sentinel:
+      transport:
+        dashboard: localhost:8862
+        port: 8720
+
+management:
+  endpoints:
+    web:
+      base-path: '/actuator'
+      exposure:
+        include: '*'
