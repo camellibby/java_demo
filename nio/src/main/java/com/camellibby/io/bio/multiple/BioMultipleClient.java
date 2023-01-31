@@ -31,13 +31,15 @@ public class BioMultipleClient {
         @Override
         public void run() {
             try {
-                OutputStream outputStream = socket.getOutputStream();
-                outputStream.write((name).getBytes(StandardCharsets.UTF_8));
-                outputStream.flush();
-                byte[] bytes = new byte[1024];
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                //向服务器端发送一条消息
+                writer.write(name + "\n");
+                writer.flush();
+
+                //读取服务器返回的消息
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 // 阻塞
-                socket.getInputStream().read(bytes, 0, 1024);
-                String msg = new String(bytes);
+                String msg = reader.readLine();
                 System.out.println("服务器：" + msg);
             } catch (IOException e) {
                 e.printStackTrace();

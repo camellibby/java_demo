@@ -20,5 +20,6 @@ public class BioSingleClient {
         String msg = reader.readLine();
 
         System.out.println("服务器：" + msg);
+        socket.close();
     }
 }
