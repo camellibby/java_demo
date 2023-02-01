@@ -11,7 +11,7 @@ public class NioAcceptClient {
     private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 1000; i++) {
             Socket socket = new Socket("127.0.0.1", 9999);
             executorService.submit(new SocketHandler(socket, "thread" + i));
             System.out.println(i);

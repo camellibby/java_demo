@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NioAcceptServer {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException, InterruptedException {
         ServerSocketChannel server = ServerSocketChannel.open();
