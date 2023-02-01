@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BioMultipleServer {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
         try (ServerSocket server = new ServerSocket(8888)) {
