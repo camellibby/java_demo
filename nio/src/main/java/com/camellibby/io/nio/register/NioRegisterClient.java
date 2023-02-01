@@ -1,32 +1,56 @@
 package com.camellibby.io.nio.register;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class NioRegisterClient {
-    public static void main(String[] args) {
+    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        LocalDateTime start = LocalDateTime.now();
         for (int i = 0; i < 10; i++) {
-            new Thread(() -> {
-                try {
-                    Socket socket = new Socket("127.0.0.1", 9999);
-                    while (true) {
-                        //向服务器端发送一条消息
-                        socket.getOutputStream().write(LocalDateTime.now().toString().getBytes(StandardCharsets.UTF_8));
-                        socket.getOutputStream().flush();
-                        Thread.sleep(1000);
-                        //读取服务器返回的消息
-                        InputStream inputStream = socket.getInputStream();
-                        byte[] bytes = new byte[1024];
-                        inputStream.read(bytes, 0, bytes.length);
-                        System.out.println("服务器：" + new String(bytes));
-                    }
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            Socket socket = new Socket("127.0.0.1", 9990);
+            executorService.submit(new SocketHandler(socket, "thread" + i));
+            System.out.println(i);
+        }
+        LocalDateTime end = LocalDateTime.now();
+        while (((ThreadPoolExecutor) executorService).getActiveCount() > 0) {
+        }
+        System.out.println("共耗时：" + Duration.between(start, end).toMillis() + "毫秒");
+        executorService.shutdown();
+    }
+
+    public static class SocketHandler implements Runnable {
+
+        private Socket socket;
+        private String name;
+
+        public SocketHandler(Socket socket, String name) {
+            this.socket = socket;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            try {
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                System.out.println(name + "向服务器端发送一条消息");
+                writer.write(name + "\n");
+                writer.flush();
+
+                //读取服务器返回的消息
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                // 阻塞
+                String msg = reader.readLine();
+                System.out.println("服务器：" + msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

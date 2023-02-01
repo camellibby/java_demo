@@ -11,21 +11,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NioAcceptServer {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     public static void main(String[] args) throws IOException, InterruptedException {
         ServerSocketChannel server = ServerSocketChannel.open();
         server.socket().bind(new InetSocketAddress(9999));
         server.configureBlocking(false);
         System.out.println("启动服务器....");
+        int i = 0;
         while (true) {
             // 阻塞
             SocketChannel socketChannel = server.accept();
             if (socketChannel == null) {
-                Thread.sleep(10);
                 continue;
             }
-            System.out.println("客户端:" + socketChannel.getRemoteAddress() + "已连接到服务器");
+            System.out.println("客户端:" + (i++) + socketChannel.getRemoteAddress() + "已连接到服务器");
             executorService.submit(new SocketHandler(socketChannel));
         }
     }
@@ -41,20 +41,23 @@ public class NioAcceptServer {
         public void run() {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4096);
             try {
-                socketChannel.read(buffer);
-                buffer.flip();
-                byte[] bytes = new byte[buffer.limit()];
-                buffer.get(bytes, 0, buffer.limit());
-                String msg = new String(bytes);
-                System.out.println("客户端：" + msg);
+                while (true) {
+                    if (socketChannel.read(buffer) > 0) {
+                        buffer.flip();
+                        byte[] bytes = new byte[buffer.limit()];
+                        buffer.get(bytes, 0, buffer.limit());
+                        String msg = new String(bytes);
+                        System.out.println("客户端：" + msg);
+                        buffer.clear();
 
-                buffer.clear();
-                buffer.put(("你好，" + msg).getBytes(StandardCharsets.UTF_8));
-                buffer.flip();
-                while (buffer.hasRemaining()) {
-                    socketChannel.write(buffer);
+                        buffer.put(("你好，" + msg).getBytes(StandardCharsets.UTF_8));
+                        buffer.flip();
+                        while (buffer.hasRemaining()) {
+                            socketChannel.write(buffer);
+                        }
+                        buffer.clear();
+                    }
                 }
-                buffer.clear();
             } catch (IOException e) {
                 e.printStackTrace();
             }
