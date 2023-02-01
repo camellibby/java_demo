@@ -2,19 +2,23 @@ package com.camellibby.io.bio.multiple;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BioMultipleClient {
-    private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        for (int i = 0; i < 1000; i++) {
+        LocalDateTime start = LocalDateTime.now();
+        for (int i = 0; i < 5000; i++) {
             Socket socket = new Socket("127.0.0.1", 8888);
             executorService.submit(new SocketHandler(socket, "thread" + i));
             System.out.println(i);
         }
+        LocalDateTime end = LocalDateTime.now();
+        System.out.println("共耗时：" + Duration.between(start, end).toMillis() + "毫秒");
         executorService.shutdown();
     }
 
