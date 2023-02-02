@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class BioSingleServer {
     public static void main(String[] args) throws IOException, InterruptedException {
-        ServerSocket server = new ServerSocket(8888);
+        ServerSocket server = new ServerSocket(8880);
         System.out.println("启动服务器....");
         // 阻塞
         Socket socket = server.accept();
